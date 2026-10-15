@@ -1,0 +1,1 @@
+'use client';import {useEffect} from 'react';import {startSmoothScroll} from '@/lib/lenis';export default function SmoothScroll(){useEffect(()=>{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)return startSmoothScroll()},[]);return null}
