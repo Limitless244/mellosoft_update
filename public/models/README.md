@@ -1,0 +1,1 @@
+Place your properly scaled bed.glb here. A missing model uses the procedural bed. Draco compression is supported via drei useGLTF. Center the model at the origin with its base on y=0.

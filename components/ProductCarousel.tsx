@@ -1,1 +1,132 @@
-'use client';import Image from 'next/image';import {useRef,useState} from 'react';import {ArrowLeft,ArrowRight,Plus,Check} from 'lucide-react';import {products} from '@/lib/data';import Reveal from './Reveal';export default function ProductCarousel(){const rail=useRef<HTMLDivElement>(null);const[added,setAdded]=useState<string[]>([]);const drag=useRef({active:false,x:0,left:0});function add(name:string){const next=added.includes(name)?added.filter(n=>n!==name):[...added,name];setAdded(next);localStorage.setItem('mellosoft-bag',JSON.stringify(next));window.dispatchEvent(new Event('bag-change'))}return <section id="products" className="section products"><Reveal><div className="section-heading" data-reveal><div><p className="eyebrow">YOUR PERFECT NIGHT STARTS HERE</p><h2>Where Comfort Meets<br/>Craftsmanship<span className="accent">.</span></h2></div><div className="section-aside"><p>Meet your new favourite place to unwind.</p><div className="arrows"><button className="circle" aria-label="Previous products" onClick={()=>rail.current?.scrollBy({left:-340,behavior:'smooth'})}><ArrowLeft size={19}/></button><button className="circle dark" aria-label="Next products" onClick={()=>rail.current?.scrollBy({left:340,behavior:'smooth'})}><ArrowRight size={19}/></button></div></div></div><div className="product-rail" ref={rail} onPointerDown={e=>{if((e.target as HTMLElement).closest('button'))return;drag.current={active:true,x:e.clientX,left:rail.current?.scrollLeft??0}}} onPointerMove={e=>{if(drag.current.active&&rail.current&&e.pointerType==='mouse')rail.current.scrollLeft=drag.current.left-(e.clientX-drag.current.x)}} onPointerUp={()=>drag.current.active=false} onPointerLeave={()=>drag.current.active=false}>{products.map((p,i)=><article className="product" key={p.name}><div className="product-image"><Image src={p.image} alt={p.name+' in '+p.type} fill sizes="(max-width:600px) 80vw, (max-width:1000px) 45vw, 23vw" draggable={false}/>{i===0&&<span className="badge">BESTSELLER</span>}<button className="circle dark add" aria-label={(added.includes(p.name)?'Remove ':'Add ')+p.name+(added.includes(p.name)?' from bag':' to bag')} onClick={()=>add(p.name)}>{added.includes(p.name)?<Check size={19}/>:<Plus size={19}/>}</button></div><div className="product-info"><h3>{p.name}</h3><span>?{p.price.toLocaleString()}</span></div><p>{p.type}</p></article>)}</div><p className="sr-only" aria-live="polite">{added.length} beds selected</p><div className="rail-bottom"><span>THOUGHTFULLY MADE. BEAUTIFULLY YOURS.</span><a className="text-link" href="#collections">Explore all beds <ArrowRight size={16}/></a></div></Reveal></section>}
+"use client";
+import Image from "next/image";
+import { useRef, useState, useEffect } from "react";
+import { ArrowLeft, ArrowRight, Plus, Check } from "lucide-react";
+import { products } from "@/lib/data";
+import Reveal from "./Reveal";
+export default function ProductCarousel() {
+  const rail = useRef<HTMLDivElement>(null);
+  const [added, setAdded] = useState<string[]>([]);
+  useEffect(() => {
+    try {
+      setAdded(JSON.parse(localStorage.getItem("mellosoft-bag") ?? "[]"));
+    } catch {
+      setAdded([]);
+    }
+  }, []);
+  const drag = useRef({ active: false, x: 0, left: 0 });
+  function add(name: string) {
+    const next = added.includes(name)
+      ? added.filter((n) => n !== name)
+      : [...added, name];
+    setAdded(next);
+    localStorage.setItem("mellosoft-bag", JSON.stringify(next));
+    window.dispatchEvent(new Event("bag-change"));
+  }
+  return (
+    <section id="products" className="section products">
+      <Reveal>
+        <div className="section-heading" data-reveal>
+          <div>
+            <p className="eyebrow">YOUR PERFECT NIGHT STARTS HERE</p>
+            <h2>
+              Where Comfort Meets
+              <br />
+              Craftsmanship<span className="accent">.</span>
+            </h2>
+          </div>
+          <div className="section-aside">
+            <p>Meet your new favourite place to unwind.</p>
+            <div className="arrows">
+              <button
+                className="circle"
+                aria-label="Previous products"
+                onClick={() =>
+                  rail.current?.scrollBy({ left: -340, behavior: "smooth" })
+                }
+              >
+                <ArrowLeft size={19} />
+              </button>
+              <button
+                className="circle dark"
+                aria-label="Next products"
+                onClick={() =>
+                  rail.current?.scrollBy({ left: 340, behavior: "smooth" })
+                }
+              >
+                <ArrowRight size={19} />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          className="product-rail"
+          ref={rail}
+          onPointerDown={(e) => {
+            if ((e.target as HTMLElement).closest("button")) return;
+            drag.current = {
+              active: true,
+              x: e.clientX,
+              left: rail.current?.scrollLeft ?? 0,
+            };
+          }}
+          onPointerMove={(e) => {
+            if (
+              drag.current.active &&
+              rail.current &&
+              e.pointerType === "mouse"
+            )
+              rail.current.scrollLeft =
+                drag.current.left - (e.clientX - drag.current.x);
+          }}
+          onPointerUp={() => (drag.current.active = false)}
+          onPointerLeave={() => (drag.current.active = false)}
+        >
+          {products.map((p, i) => (
+            <article className="product" key={p.name}>
+              <div className="product-image">
+                <Image
+                  src={p.image}
+                  alt={p.name + " in " + p.type}
+                  fill
+                  sizes="(max-width:600px) 80vw, (max-width:1000px) 45vw, 23vw"
+                  draggable={false}
+                />
+                {i === 0 && <span className="badge">BESTSELLER</span>}
+                <button
+                  className="circle dark add"
+                  aria-label={
+                    (added.includes(p.name) ? "Remove " : "Add ") +
+                    p.name +
+                    (added.includes(p.name) ? " from bag" : " to bag")
+                  }
+                  onClick={() => add(p.name)}
+                >
+                  {added.includes(p.name) ? (
+                    <Check size={19} />
+                  ) : (
+                    <Plus size={19} />
+                  )}
+                </button>
+              </div>
+              <div className="product-info">
+                <h3>{p.name}</h3>
+                <span>&pound;{p.price.toLocaleString()}</span>
+              </div>
+              <p>{p.type}</p>
+            </article>
+          ))}
+        </div>
+        <p className="sr-only" aria-live="polite">
+          {added.length} beds selected
+        </p>
+        <div className="rail-bottom">
+          <span>THOUGHTFULLY MADE. BEAUTIFULLY YOURS.</span>
+          <a className="text-link" href="#collections">
+            Explore all beds <ArrowRight size={16} />
+          </a>
+        </div>
+      </Reveal>
+    </section>
+  );
+}

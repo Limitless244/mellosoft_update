@@ -1,1 +1,12 @@
-import Lenis from 'lenis';import {gsap,ScrollTrigger} from './gsap';export function startSmoothScroll(){const lenis=new Lenis({duration:1.15});lenis.on('scroll',ScrollTrigger.update);const tick=(t:number)=>lenis.raf(t*1000);gsap.ticker.add(tick);return ()=>{gsap.ticker.remove(tick);lenis.destroy()}}
+import Lenis from "lenis";
+import { gsap, ScrollTrigger } from "./gsap";
+export function startSmoothScroll() {
+  const lenis = new Lenis({ duration: 1.15 });
+  lenis.on("scroll", ScrollTrigger.update);
+  const tick = (t: number) => lenis.raf(t * 1000);
+  gsap.ticker.add(tick);
+  return () => {
+    gsap.ticker.remove(tick);
+    lenis.destroy();
+  };
+}

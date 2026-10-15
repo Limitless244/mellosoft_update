@@ -1,1 +1,98 @@
-'use client';import {useState} from 'react';import {ArrowLeft,ArrowRight,ArrowUpRight,Plus} from 'lucide-react';import {collections} from '@/lib/data';import BedPreview from './BedPreview';import Reveal from './Reveal';export default function Showcase(){const[active,setActive]=useState(0);const change=(n:number)=>setActive((n+collections.length)%collections.length);return <section id="collections" className="section showcase"><Reveal><div className="section-heading" data-reveal><div><p className="eyebrow">FIND THE ONE THAT FEELS LIKE YOU</p><h2>Discover Timeless<br/>Bed Designs<span className="accent">.</span></h2></div><p>A style for every space.<br/>A little something for every kind of dreamer.</p></div><div className="showcase-layout"><div className="accordion">{collections.map((c,i)=><article key={c.name} className={active===i?'collection active':'collection'}><h3><button aria-expanded={active===i} aria-controls={'collection-'+i} onClick={()=>change(i)}><span className="collection-index">0{i+1}</span>{c.name}{active===i?<ArrowUpRight size={21}/>:<Plus size={18}/>}</button></h3><div id={'collection-'+i} hidden={active!==i}><p>{c.description}</p><a className="circle clay" href="#products" aria-label={'Shop '+c.name+' beds'}><ArrowUpRight size={20}/></a></div></article>)}</div><div className="showcase-stage"><span className="stage-label">THE MELLOSOFT COLLECTION</span><div className="stage-circle"/><BedPreview variant={active}/><span className="stage-detail" key={active}>{collections[active].detail}</span><span className="stage-count" aria-live="polite">0{active+1}<small>/ 04</small></span><div className="stage-arrows arrows"><button className="circle" aria-label="Previous collection" onClick={()=>change(active-1)}><ArrowLeft size={18}/></button><button className="circle dark" aria-label="Next collection" onClick={()=>change(active+1)}><ArrowRight size={18}/></button></div><span className="next-peek">{collections[(active+1)%4].name} ?</span></div></div></Reveal></section>
+"use client";
+import { useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Plus } from "lucide-react";
+import { collections } from "@/lib/data";
+import BedPreview from "./BedPreview";
+import Reveal from "./Reveal";
+export default function Showcase() {
+  const [active, setActive] = useState(0);
+  const change = (n: number) =>
+    setActive((n + collections.length) % collections.length);
+  return (
+    <section id="collections" className="section showcase">
+      <Reveal>
+        <div className="section-heading" data-reveal>
+          <div>
+            <p className="eyebrow">FIND THE ONE THAT FEELS LIKE YOU</p>
+            <h2>
+              Discover Timeless
+              <br />
+              Bed Designs<span className="accent">.</span>
+            </h2>
+          </div>
+          <p>
+            A style for every space.
+            <br />A little something for every kind of dreamer.
+          </p>
+        </div>
+        <div className="showcase-layout">
+          <div className="accordion">
+            {collections.map((c, i) => (
+              <article
+                key={c.name}
+                className={active === i ? "collection active" : "collection"}
+              >
+                <h3>
+                  <button
+                    aria-expanded={active === i}
+                    aria-controls={"collection-" + i}
+                    onClick={() => change(i)}
+                  >
+                    <span className="collection-index">0{i + 1}</span>
+                    {c.name}
+                    {active === i ? (
+                      <ArrowUpRight size={21} />
+                    ) : (
+                      <Plus size={18} />
+                    )}
+                  </button>
+                </h3>
+                <div id={"collection-" + i} hidden={active !== i}>
+                  <p>{c.description}</p>
+                  <a
+                    className="circle clay"
+                    href="#products"
+                    aria-label={"Shop " + c.name + " beds"}
+                  >
+                    <ArrowUpRight size={20} />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="showcase-stage">
+            <span className="stage-label">THE MELLOSOFT COLLECTION</span>
+            <div className="stage-circle" />
+            <BedPreview variant={active} />
+            <span className="stage-detail" key={active}>
+              {collections[active].detail}
+            </span>
+            <span className="stage-count" aria-live="polite">
+              0{active + 1}
+              <small>/ 04</small>
+            </span>
+            <div className="stage-arrows arrows">
+              <button
+                className="circle"
+                aria-label="Previous collection"
+                onClick={() => change(active - 1)}
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <button
+                className="circle dark"
+                aria-label="Next collection"
+                onClick={() => change(active + 1)}
+              >
+                <ArrowRight size={18} />
+              </button>
+            </div>
+            <span className="next-peek">
+              {collections[(active + 1) % 4].name} &rarr;
+            </span>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}

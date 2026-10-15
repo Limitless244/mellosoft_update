@@ -1,1 +1,21 @@
-import type {Config} from 'tailwindcss'; export default {content:['./app/**/*.{ts,tsx}','./components/**/*.{ts,tsx}'],theme:{extend:{colors:{sand:'#EDE6DA',cream:'#FAF8F4',charcoal:'#222222',terracotta:'#C2571F'},fontFamily:{serif:['var(--font-heading)','serif'],sans:['var(--font-body)','sans-serif']},borderRadius:{card:'24px',large:'32px'},boxShadow:{soft:'0 24px 70px #22222212'}}},plugins:[]} satisfies Config;
+import type { Config } from "tailwindcss";
+export default {
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        sand: "#EDE6DA",
+        cream: "#FAF8F4",
+        charcoal: "#222222",
+        terracotta: "#C2571F",
+      },
+      fontFamily: {
+        serif: ["var(--font-heading)", "serif"],
+        sans: ["var(--font-body)", "sans-serif"],
+      },
+      borderRadius: { card: "24px", large: "32px" },
+      boxShadow: { soft: "0 24px 70px #22222212" },
+    },
+  },
+  plugins: [],
+} satisfies Config;
