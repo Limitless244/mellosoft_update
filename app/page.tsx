@@ -1,1 +1,1 @@
-export default function Page(){return <main>Mellosoft</main>}
+import Navbar from '@/components/Navbar';import Hero from '@/components/Hero';export default function Page(){return <><Navbar/><main><Hero/></main></>}
