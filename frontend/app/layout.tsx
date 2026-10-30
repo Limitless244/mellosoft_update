@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Urbanist } from "next/font/google";
-import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+
 const h = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -28,3 +29,4 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
+

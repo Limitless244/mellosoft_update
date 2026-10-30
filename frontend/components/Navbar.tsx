@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import {
   Search,
@@ -56,7 +57,13 @@ export default function Navbar() {
     <>
       <header className="navbar">
         <a href="#home" className="logo">
-          mellosoft<span>&reg;</span>
+          <Image
+            src="/images/logo.png"
+            width={160}
+            height={160}
+            className="h-[72px] w-[72px] scale-150 shrink-0 object-contain md:h-24 md:w-24 md:scale-[1.75]"
+            alt="Mellosoft"
+          />
         </a>
         <nav
           aria-label="Main navigation"
@@ -153,8 +160,8 @@ export default function Navbar() {
                 {panel === "bag"
                   ? bag.length
                     ? "Your selected beds: " +
-                      bag.join(", ") +
-                      ". Contact us to discuss your selection."
+                    bag.join(", ") +
+                    ". Contact us to discuss your selection."
                     : "Your bag is empty. Explore the collection below to add a bed."
                   : "For personal styling advice, write to hello@mellosoft.com."}
               </p>
