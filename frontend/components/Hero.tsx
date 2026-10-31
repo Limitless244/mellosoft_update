@@ -1,9 +1,15 @@
 "use client";
 import Image from "next/image";
 import BedPreview from "./BedPreview";
-import { useState, useLayoutEffect, useEffect, useRef } from "react";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { gsap } from "@/lib/gsap";
+import HeroSunrise from "./HeroSunrise";
+import { useState, useEffect, useRef } from "react";
+import { ArrowDown, ArrowUpRight, Plus } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const heroSlides = [
   {
@@ -32,6 +38,50 @@ const heroSlides = [
   },
 ];
 
+/* ─── Static PhotoCard Component ─────────────────────────────────── */
+function PhotoCard({
+  src,
+  alt,
+  style,
+  showBadge,
+}: {
+  src: string;
+  alt: string;
+  style: React.CSSProperties;
+  showBadge?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        borderRadius: "18px",
+        overflow: "hidden",
+        border: "6px solid #fff",
+        boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
+        ...style,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        draggable={false}
+      />
+      {showBadge && (
+        <>
+          <span className="badge">BESTSELLER</span>
+          <span className="circle dark add" aria-label="Explore Beds">
+            <Plus size={19} />
+          </span>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function Hero() {
   const [preview, setPreview] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -44,7 +94,10 @@ export default function Hero() {
     return () => clearInterval(timer);
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if (!root.current) return;
+    if (typeof window === "undefined") return;
+
     const ctx = gsap.context(() => {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -71,6 +124,7 @@ export default function Hero() {
 
   return (
     <section id="home" className="hero" ref={root}>
+      <HeroSunrise activeSlide={activeSlide} />
       <div className="hero-photo">
         <Image
           className="hero-bg-image hero-slide-1-img"
@@ -90,6 +144,7 @@ export default function Hero() {
           sizes="100vw"
         />
         <div className="hero-shade" />
+        <div className="hero-mobile-gradient" />
       </div>
 
       <div className="hero-copy grid" style={{ zIndex: 10 }}>
@@ -133,6 +188,48 @@ export default function Hero() {
         })}
       </div>
 
+      {/* ── Static 3-Card Stack in the Hero (Right Side, Preserved Appearance) ── */}
+      <div
+        className="hero-card-stack hidden md:block"
+        style={{
+          position: "absolute",
+          right: "6%",
+          top: "clamp(60px, 10vh, 95px)",
+          width: "300px",
+          height: "340px",
+          zIndex: 25,
+          pointerEvents: "auto",
+        }}
+      >
+        {/* back — pillows */}
+        <PhotoCard
+          src="/images/categoryimg/pillow.png"
+          alt="Pillows"
+          style={{
+            transform: "rotate(-9deg) translate(-70px, 18px)",
+            zIndex: 10,
+          }}
+        />
+
+        {/* middle — firm mattresses */}
+        <PhotoCard
+          src="/images/categoryimg/firm.png"
+          alt="Firm Mattresses"
+          style={{
+            transform: "rotate(-4deg) translate(-32px, 8px)",
+            zIndex: 20,
+          }}
+        />
+
+        {/* front — beds */}
+        <PhotoCard
+          src="/images/categoryimg/bed.png"
+          alt="Beds"
+          showBadge
+          style={{ zIndex: 30 }}
+        />
+      </div>
+
       <div className="hero-inset">
         <span className="tiny-stars">
           <Image
@@ -169,18 +266,22 @@ export default function Hero() {
             activeSlide === 0 ? "is-active" : "is-inactive"
           }`}
         >
-          <span>SCROLL TO GET COMFORTABLE</span>
-          <ArrowDown size={16} />
-          <span>{heroSlides[0].counter}</span>
+          <span className="hero-bottom-scroll">SCROLL TO GET COMFORTABLE</span>
+          <span className="hero-bottom-scroll">
+            <ArrowDown size={16} />
+          </span>
+          <span className="hero-bottom-counter">{heroSlides[0].counter}</span>
         </div>
         <div
           className={`hero-bottom-slide hero-bottom-slide-two ${
             activeSlide === 1 ? "is-active" : "is-inactive"
           }`}
         >
-          <span>SCROLL TO GET COMFORTABLE</span>
-          <ArrowDown size={16} />
-          <span>{heroSlides[1].counter}</span>
+          <span className="hero-bottom-scroll">SCROLL TO GET COMFORTABLE</span>
+          <span className="hero-bottom-scroll">
+            <ArrowDown size={16} />
+          </span>
+          <span className="hero-bottom-counter">{heroSlides[1].counter}</span>
         </div>
       </div>
     </section>

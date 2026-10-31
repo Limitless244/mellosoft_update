@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { ArrowRight, Plus } from "lucide-react";
-import { ScrollTrigger } from "@/lib/gsap";
 import Reveal from "./Reveal";
 
 const categories = [
@@ -74,7 +73,6 @@ export default function ShopByCategory() {
         <div
           className="product-rail category-rail"
           ref={rail}
-          data-lenis-prevent-wheel
           onPointerDown={(e) => {
             if ((e.target as HTMLElement).closest("button, a")) return;
             drag.current = {
@@ -98,10 +96,7 @@ export default function ShopByCategory() {
           {categories.map((c, i) => (
             <article className="product category-item" key={c.slug}>
               <a href={`/shop/${c.slug}`} className="block">
-                <div
-                  className="product-image"
-                  {...(c.slug === "beds" ? { "data-target": "beds" } : {})}
-                >
+                <div className="product-image">
                   <Image
                     src={c.image}
                     alt={c.name}
@@ -109,7 +104,6 @@ export default function ShopByCategory() {
                     sizes="(max-width:600px) 80vw, (max-width:1000px) 45vw, 23vw"
                     loading={i < 3 ? "eager" : undefined}
                     draggable={false}
-                    onLoad={() => ScrollTrigger.refresh()}
                   />
                   {c.badge && <span className="badge">{c.badge}</span>}
                   <span

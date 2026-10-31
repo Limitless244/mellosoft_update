@@ -1,13 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import PromoShowcase from "@/components/PromoShowcase";
 import ShopByCategory from "@/components/ShopByCategory";
-import FloatingBedsCard from "@/components/FloatingBedsCard";
 import CuratedGrid from "@/components/CuratedGrid";
 import ProductCarousel from "@/components/ProductCarousel";
+import MattressLayers from "@/components/layers/MattressLayers";
 import Showcase from "@/components/Showcase";
 import Testimonials from "@/components/Testimonials";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
+
 export default function Page() {
   return (
     <>
@@ -16,13 +18,12 @@ export default function Page() {
       </a>
       <Navbar />
       <main>
-        <div className="relative">
-          <FloatingBedsCard />
-          <Hero />
-          <ShopByCategory />
-        </div>
+        <Hero />
+        <PromoShowcase />
+        <ShopByCategory />
         <CuratedGrid />
         <ProductCarousel />
+        <MattressLayers />
         <Showcase />
         <Testimonials />
         <Newsletter />

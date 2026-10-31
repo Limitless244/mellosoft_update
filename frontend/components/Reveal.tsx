@@ -1,6 +1,12 @@
 "use client";
-import { useLayoutEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function Reveal({
   children,
   className = "",
@@ -9,17 +15,24 @@ export default function Reveal({
   className?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
+
+  useEffect(() => {
+    if (!root.current) return;
+    if (typeof window === "undefined") return;
+
     const ctx = gsap.context(() => {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
       gsap.from("[data-reveal]", {
         y: 40,
         opacity: 0,
         duration: 1,
         stagger: 0.1,
         ease: "power3.out",
-        scrollTrigger: { trigger: root.current, start: "top 88%" },
+        clearProps: "transform,opacity",
+        scrollTrigger: { trigger: root.current, start: "top 88%", once: true },
       });
+
       root.current
         ?.querySelectorAll<HTMLElement>("[data-count]")
         .forEach((el) => {
@@ -27,7 +40,7 @@ export default function Reveal({
           gsap.to(state, {
             value: Number(el.dataset.count),
             duration: 1.5,
-            scrollTrigger: { trigger: el, start: "top 95%" },
+            scrollTrigger: { trigger: el, start: "top 95%", once: true },
             onUpdate: () => {
               el.textContent =
                 Math.round(state.value) + (el.dataset.suffix ?? "+");
@@ -35,8 +48,10 @@ export default function Reveal({
           });
         });
     }, root);
+
     return () => ctx.revert();
   }, []);
+
   return (
     <div ref={root} className={className}>
       {children}

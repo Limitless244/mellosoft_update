@@ -1,13 +1,23 @@
 "use client";
 import Image from "next/image";
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
-import { gsap } from "@/lib/gsap";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const ref = useRef<HTMLElement>(null);
-  useLayoutEffect(() => {
+
+  useEffect(() => {
+    if (!ref.current) return;
+    if (typeof window === "undefined") return;
+
     const ctx = gsap.context(() => {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       gsap.from(".fan-photo", {
@@ -17,11 +27,14 @@ export default function Newsletter() {
         stagger: 0.12,
         duration: 1.1,
         ease: "expo.out",
-        scrollTrigger: { trigger: ref.current, start: "top 85%" },
+        scrollTrigger: { trigger: ref.current, start: "top 85%", once: true },
+        clearProps: "transform,opacity",
       });
     }, ref);
+
     return () => ctx.revert();
   }, []);
+
   return (
     <section id="contact" className="newsletter" ref={ref}>
       <span className="outline-text" aria-hidden="true">
